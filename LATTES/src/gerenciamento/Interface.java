@@ -5,11 +5,12 @@ import entidades.Pesquisador;
 import entidades.Projeto;
 
 public class Interface {
-	int P, A = 0; 
+	int P=0, QP = 0, A = 0,q; 
+	int POS = 0; //indice do vetor de pesquisadores de artigos
+	int PAS = 0; // indice do vetor de pesquisadores de projetos
 	private Pesquisador pesquisadores[] = new Pesquisador[100];
 	private Artigo artigos[] = new Artigo[50];
 	private Projeto projetos[] = new Projeto[50];
-	private Artigo aux = new Artigo();
 	Pesquisador retornavel;
 
 	
@@ -25,7 +26,8 @@ public class Interface {
 				artigos[A] = new Artigo();
 				System.out.println("Diga a quantidade de pesquisadores envolvidos: ");
 				qntPES = ler.nextInt();
-				artigos[A].inicializaEnvolvidos(qntPES);
+				Pesquisador vetor [] = new Pesquisador[qntPES];
+				POS = 0;
 				System.out.println("DIGITE QUANTOS PESQUISADORES NÃO SÃO REGISTRADOS NO SISTEMA");
 				System.out.println("(Caso todos estejam, digite 0)");
 				Nregistrados = ler.nextInt();
@@ -44,8 +46,8 @@ public class Interface {
 					flag = 0;
 					for( j = 0 ; j < P ; j ++) {
 						if(nome.equals(pesquisadores[j].getNome())) {
-							retornavel = pesquisadores[j];
-							artigos[A].setEnvolvidos(retornavel);
+							vetor[POS] = pesquisadores[j];
+							POS++;
 							System.out.println("====PESQUISADOR ENCONTRADO====");
 							flag = 1;
 						}
@@ -56,6 +58,7 @@ public class Interface {
 						i--;
 					}
 				}
+				artigos[A].setEnvolvidos(vetor);
 				System.out.println("DIGITE O TITULO DO ARTIGO: ");
 				artigos[A].setTituloArt(ler.nextLine());
 				System.out.println("DIGITE O TITULO DA REVISTA: ");
@@ -70,9 +73,12 @@ public class Interface {
 				
 			} else if( n == 2 ) {
 				// RREGISTRAR PROJETO
+				projetos[QP] = new Projeto();
 				System.out.println("Diga a quantidade de pesquisadores envolvidos: ");
 				qntPES = ler.nextInt();
-				aux.inicializaEnvolvidos(qntPES);
+				Pesquisador vetor [] = new Pesquisador[qntPES];
+				PAS = 0;
+				projetos[QP].setQntd(qntPES);
 				System.out.println("DIGITE QUANTOS PESQUISADORES NÃO SÃO REGISTRADOS NO SISTEMA");
 				System.out.println("(Caso todos estejam, digite 0)");
 				Nregistrados = ler.nextInt();
@@ -89,7 +95,8 @@ public class Interface {
 					flag = 0;
 					for( j = 0 ; j < P ; j ++) {
 						if(nome.equals(pesquisadores[j].getNome())) {
-							// COLOCAR OS PESQUISADORES DENTRO DO ARRAY DE PESQUISADORES DO PROJETO
+							vetor[PAS] = pesquisadores[j];
+							PAS++;
 							System.out.println("====PESQUISADOR ENCONTRADO====");
 							flag = 1;
 							break;
@@ -101,6 +108,21 @@ public class Interface {
 						i--;
 					}
 				}
+				projetos[QP].setEnvolvidos(vetor);
+				System.out.println("DIGITE O TITULO DO PROJETO: ");
+				projetos[QP].setTitulo(ler.nextLine());
+				System.out.println("DIGITE A DATA DE INICIO: dd/mm/aa");
+				projetos[QP].setDataInicio(ler.nextLine());
+				System.out.println("DIGITE A DATA DO FIM DO PROJETO: ");
+				projetos[QP].setDataFim(ler.nextLine());
+				System.out.println("DIGITE A DESCRIÇÃO DO PROJETO: ");
+				projetos[QP].setDescrição(ler.nextLine());
+				QP++;
+				System.out.println("==============================");
+				System.out.println("=PROJETO REGISTRADO COM SUCESSO=");
+				System.out.println("==============================");
+
+				
 			}else if(n == 3 ) {
 				// LISTAR PESQUISADORES DA MESMA FACULDADE
 				System.out.println("Digite o nome da universidade: ");
@@ -116,11 +138,48 @@ public class Interface {
 					System.out.println("Nenhum pesquisador encontrado na universidade " + uni );
 				}
 			}else if(n == 4 ) {
-				//  LISTAR AUTORES DE UM DETERMINADO ARTIGO
+				//  LISTAR AUTORES DE UM DETERMINADO ARTIGO                             TA ERRADO
+				System.out.println("DIGITE O TITULO DO ARTIGO: ");
+				nome = ler.nextLine();
+				for ( i = 0 ; i < A ; i ++ ) {
+					if(artigos[i].getTituloArt().equals(nome)) {
+						System.out.println("======PESQUISADORES ENVOLVIDOS======");
+						Pesquisador vetor [] = new Pesquisador[artigos[i].getQntd()];
+						vetor = artigos[i].getEnvolvidos();
+						
+						for ( j = 0 ; j < artigos[i].getQntd() ; j++ ) {
+							System.out.println("Nome: " + vetor[j].getNome());
+						}
+						break;
+					}
+				}
 			}else if(n == 5 ) {
 				// LISTAR PESQUISADORES DE UM DETERMINADO PROJETO
+				System.out.println("Digite o titulo do projeto: ");
+				nome = ler.nextLine();
+				for ( i = 0 ; i < QP ; i ++ ) {
+					if(projetos[i].getTitulo().equals(nome)) {
+						Pesquisador vetor [] = new Pesquisador[projetos[i].getQntd()];
+						vetor = projetos[i].getEnvolvidos();
+						System.out.println("========PESQUISADORES ENVOLVIDOS======");
+						for ( j = 0 ; j < projetos[i].getQntd() ; j ++) {
+							System.out.println("Nome: " + vetor[j].getNome());
+						}
+					}
+				}
 			}else if( n == 6 ) {
 				// LISTAR TODOS OS PROJETOS DE UM DETERMINADO PESQUISADOR 
+				System.out.println("Digite o nome do pesquisador: ");
+				nome = ler.nextLine();
+				for ( i = 0 ; i < QP ; i ++ ) {
+					Pesquisador vetor[] = new Pesquisador[projetos[i].getQntd()];
+					vetor = projetos[i].getEnvolvidos();
+					for ( j = 0 ; j < projetos[i].getQntd() ; j ++ ) {
+						if(vetor[j].getNome().equals(nome)) {
+							System.out.println("Projeto: " + projetos[i].getTitulo());
+						}
+					}
+				}
 			}else if(n == 7) {
 				// LISTAR TODOS OS PESQUISADORES
 				System.out.println("=====PESQUISADORES=====");
@@ -137,11 +196,11 @@ public class Interface {
 		System.out.println("=====MENU=====");
 		System.out.println("0 - SAIR");//*
 		System.out.println("1 - REGISTRAR ARTIGO");//
-		System.out.println("2 - REGISTRAR PROJETO");
+		System.out.println("2 - REGISTRAR PROJETO");//*
 		System.out.println("3 - LISTAR PESQUISADORES DE UMA MESMA FACULDADE");//*
 		System.out.println("4 - LISTAR OS AUTORES DE UM DETERMINADO ARTIGO");
-		System.out.println("5- LISTAR PESQUISADORES DE UM DETERMINADO PROJETO");
-		System.out.println("6 - LISTAR TODOS OS PROJETOS DE UM DETERMINADO PESQUISADOR");
+		System.out.println("5 - LISTAR PESQUISADORES DE UM DETERMINADO PROJETO");//*
+		System.out.println("6 - LISTAR TODOS OS PROJETOS DE UM DETERMINADO PESQUISADOR");//*
 		System.out.println("7 - LISTAR PESQUISADORES");//*
 
 
