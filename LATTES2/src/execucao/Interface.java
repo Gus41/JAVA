@@ -8,9 +8,10 @@ import entidades.Pesquisador;
 import entidades.Projeto;
 
 public class Interface {
-	private ArrayList<Pesquisador>Pesquisadores = new ArrayList<Pesquisador>();
-	private ArrayList<Artigo>Artigos = new ArrayList<Artigo>();
-	private ArrayList<Projeto> Projetos = new ArrayList<Projeto>();
+	private ArrayList<Pesquisador>Pesquisadores;
+	private ArrayList<Artigo>Artigos;
+	private ArrayList<Projeto> Projetos;
+	private GeraDados gerador = new GeraDados();
 	
 	
 	
@@ -19,7 +20,9 @@ public class Interface {
 		Scanner ler = new Scanner(System.in);
 		int nPN,flag;
 		String aux;
-		
+		Pesquisadores = gerador.getPesquisadores();
+		Artigos = gerador.getArtigos();
+		Projetos = gerador.getProjetos();
 		while ( n != 0 ) {
 			n = menu(ler);
 			ler.nextLine();
@@ -163,27 +166,24 @@ public class Interface {
 	}
 	private Pesquisador registraP(Scanner ler) {
 		System.out.println("==========REGISTRO DE PESQUISADOR=========");
-		Pesquisador ret = new Pesquisador();
 		System.out.println("Digite seu nome: ");
-		ret.setNome(ler.nextLine());
+		String nome = (ler.nextLine());
+		System.out.println("Digite a universidade: ");
+		Pesquisador ret = new Pesquisador(nome, ler.nextLine());
 		System.out.println("Digite a area de atuacao: ");
 		ret.setArea(ler.nextLine());
-		System.out.println("Digite a universidade: ");
-		ret.setUniversidade(ler.nextLine());
+
 		
 		return ret;
 		
 	}
 	private Artigo registraA(Scanner ler) {
 		System.out.println("==========REGISTRO DE ARTIGOS========");
-		Artigo ret = new Artigo();
 		System.out.println("Digite o titulo do artigo: ");
-		ret.setTitulo(ler.nextLine());
+		String titulo = ler.nextLine();
 		System.out.println("Digite o titulo de revista: ");
-		ret.setTituloREV(ler.nextLine());
-		System.out.println("Digite o ano que o artigo foi geito: ");
-		ret.setAno(ler.nextInt());
-		ler.nextLine();
+		String tituloREV = ler.nextLine();
+		
 		System.out.println("----LINKANDO OS PESQUISADORES AO ARTIGO-----");
 		System.out.println("Digite quantos pesquisadores estao envolvidos no artigo: ");
 		int i,nP = ler.nextInt();
@@ -210,22 +210,20 @@ public class Interface {
 			}
 			
 		}
-		ret.setEnvolvidos(pesq);
+		Artigo ret = new Artigo(titulo,pesq);
+		ret.setTituloREV(tituloREV);
+		System.out.println("Digite o ano que o artigo foi feito: ");
+		ret.setAno(ler.nextInt());
+		ler.nextLine();
+		
 		
 		
 		return ret;
 	}
 	private Projeto registraPRO(Scanner ler) {
 		System.out.println("========REGISTRO DE PROJETO=====");
-		Projeto ret = new Projeto();
 		System.out.println("Digite o titulo do projeto: ");
-		ret.setTitulo(ler.nextLine());
-		System.out.println("Digite a descrição: ");
-		ret.setDescricao(ler.nextLine());
-		System.out.println("Digite a data de inicio: dd/mm/aa ");
-		ret.setDataInicio(ler.nextLine());
-		System.out.println("Digite a data final : dd/mm/aa ");
-		ret.setDataFim(ler.nextLine());
+		String titulo = (ler.nextLine());
 		int i,flag;
 		String nome;
 		System.out.println("----LINKANDO PESQUISADORES AO PROJETO----");
@@ -250,8 +248,13 @@ public class Interface {
 			}
 			
 		}
-		ret.setEnvolvidos(pesq);
-		
+		Projeto ret = new Projeto(titulo,pesq);
+
+		ret.setDescricao(ler.nextLine());
+		System.out.println("Digite a data de inicio: dd/mm/aa ");
+		ret.setDataInicio(ler.nextLine());
+		System.out.println("Digite a data final : dd/mm/aa ");
+		ret.setDataFim(ler.nextLine());		
 		return ret;
 	}
 
